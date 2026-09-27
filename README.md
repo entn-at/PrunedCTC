@@ -28,7 +28,13 @@ Follow the
 k2 wheels are tied to specific PyTorch builds. A generic `pip install k2` can
 select an older PyTorch dependency and replace an existing installation.
 
-Install Pruned CTC from this repository:
+Install Pruned CTC from PyPI:
+
+```bash
+python -m pip install pruned-ctc
+```
+
+Or install from this repository:
 
 ```bash
 git clone https://github.com/yfyeung/PrunedCTC.git
@@ -115,5 +121,5 @@ explicitly.
 
 ## License
 
-[MIT](https://github.com/yfyeung/PrunedCTC/blob/main/LICENSE). Copyright 2026 Shanghai Jiao Tong University.
+[MIT](https://github.com/yfyeung/PrunedCTC/blob/master/LICENSE). Copyright 2026 Shanghai Jiao Tong University.
 Author: Yifan Yang.
