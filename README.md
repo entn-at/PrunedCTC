@@ -1,9 +1,9 @@
-# PrunedCTC
+# Pruned CTC
 
 Memory-efficient CTC training for large vocabularies, implemented in PyTorch and
 [k2](https://github.com/k2-fsa/k2).
 
-PrunedCTC computes the CTC loss directly from encoder states and a linear
+Pruned CTC computes the CTC loss directly from encoder states and a linear
 projection, avoiding a full `(batch, time, vocabulary)` logit tensor. It combines:
 
 - **Exact vocabulary reduction:** the CTC graph uses only the target tokens and
@@ -28,7 +28,7 @@ Follow the
 k2 wheels are tied to specific PyTorch builds. A generic `pip install k2` can
 select an older PyTorch dependency and replace an existing installation.
 
-Install PrunedCTC from this repository:
+Install Pruned CTC from this repository:
 
 ```bash
 git clone https://github.com/yfyeung/PrunedCTC.git
@@ -37,7 +37,7 @@ python -m pip install .
 ```
 
 The distribution name is `pruned-ctc`; the Python import is `pruned_ctc`.
-k2 is installed separately so that PrunedCTC does not choose a binary build for
+k2 is installed separately so that Pruned CTC does not choose a binary build for
 your environment.
 
 ## Quick start
