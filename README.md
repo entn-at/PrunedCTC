@@ -36,10 +36,6 @@ cd PrunedCTC
 python -m pip install .
 ```
 
-The distribution name is `pruned-ctc`; the Python import is `pruned_ctc`.
-k2 is installed separately so that Pruned CTC does not choose a binary build for
-your environment.
-
 ## Quick start
 
 ```python
@@ -48,7 +44,6 @@ import torch
 
 from pruned_ctc import pruned_ctc_loss
 
-torch.manual_seed(0)
 device = torch.device("cpu")  # Use "cuda" with a compatible CUDA-enabled k2.
 
 encoder_out = torch.randn(2, 12, 8, device=device, requires_grad=True)
