@@ -1,10 +1,14 @@
 # Pruned CTC
 
-[![arXiv](https://img.shields.io/badge/arXiv-2609.33645-b31b1b.svg)](https://arxiv.org/abs/2609.33645)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/yfyeung/PrunedCTC/blob/master/LICENSE)
+<div align="center">
+    <a href="https://arxiv.org/abs/2609.33645"><img src="https://img.shields.io/badge/arXiv-2609.33645-b31b1b.svg" alt="arXiv"></a>
+    <a href="https://github.com/yfyeung/PrunedCTC/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License"></a>
+    <p>
+    Official code for <em>Pruned CTC for Memory-Efficient Large-Vocabulary ASR Training</em>
+    </p>
+</div>
 
-Official code for
-*Pruned CTC for Memory-Efficient Large-Vocabulary ASR Training*.
+---
 
 Pruned CTC uses PyTorch and [k2](https://github.com/k2-fsa/k2) to compute the CTC
 loss directly from encoder states and a linear projection, avoiding a full
@@ -117,6 +121,8 @@ explicitly.
 Author: Yifan Yang.
 
 ## Citation
+
+Please cite our paper if you find this work useful:
 
 ```bibtex
 @misc{yang2026prunedctcmemoryefficientlargevocabulary,
