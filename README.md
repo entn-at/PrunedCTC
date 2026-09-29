@@ -1,10 +1,14 @@
 # Pruned CTC
 
-Memory-efficient CTC training for large vocabularies, implemented in PyTorch and
-[k2](https://github.com/k2-fsa/k2).
+[![arXiv](https://img.shields.io/badge/arXiv-2609.33645-b31b1b.svg)](https://arxiv.org/abs/2609.33645)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/yfyeung/PrunedCTC/blob/master/LICENSE)
 
-Pruned CTC computes the CTC loss directly from encoder states and a linear
-projection, avoiding a full `(batch, time, vocabulary)` logit tensor. It combines:
+Official code for
+*Pruned CTC for Memory-Efficient Large-Vocabulary ASR Training*.
+
+Pruned CTC uses PyTorch and [k2](https://github.com/k2-fsa/k2) to compute the CTC
+loss directly from encoder states and a linear projection, avoiding a full
+`(batch, time, vocabulary)` logit tensor. It combines:
 
 - **Exact vocabulary reduction:** the CTC graph uses only the target tokens and
   blank. Probabilities are still normalized over the **full vocabulary**, and
@@ -12,8 +16,8 @@ projection, avoiding a full `(batch, time, vocabulary)` logit tensor. It combine
 - **Chunked projection and backward:** vocabulary chunks are recomputed during
   backward to reduce the memory used by the projection and loss activations.
 - **Alignment pruning:** k2 prunes the alignment lattice using a configurable
-  log-score beam. A finite beam makes the alignment sum approximate; vocabulary reduction
-  itself does not introduce this approximation.
+  log-score beam. A finite beam makes the alignment sum approximate;
+  vocabulary reduction itself remains exact.
 
 The projection weights, their gradients, and optimizer states remain dense.
 Memory savings depend on the vocabulary, batch, sequence lengths, chunk size,
@@ -75,31 +79,22 @@ print(f"Summed CTC loss: {loss.item():.4f}")
 
 ## API
 
-```python
-pruned_ctc_loss(
-    encoder_out,
-    weight,
-    bias,
-    y,
-    encoder_out_lens,
-    chunk_size=4096,
-    output_beam=100.0,
-    max_states=100_000_000,
-    blank_id=0,
-)
-```
+`pruned_ctc_loss` accepts the arguments below. Optional arguments are keyword-only.
 
-| Argument | Expected value |
-| --- | --- |
-| `encoder_out` | Encoder states of shape `(N, T, D)`. |
-| `weight` | Linear projection weights of shape `(V, D)`. |
-| `bias` | Projection bias of shape `(V,)`, or `None`. |
-| `y` | Two-axis `k2.RaggedTensor`: one sequence of target IDs per utterance, with no blank tokens. |
-| `encoder_out_lens` | Int32/int64 frame counts of shape `(N,)`, each between `1` and `T`. |
-| `chunk_size` | Number of vocabulary columns processed per chunk. Smaller chunks reduce temporary projection memory and can cost speed. |
-| `output_beam` | Positive, finite log-score beam used for alignment pruning. Larger beams retain more alignments and use more memory. |
-| `max_states` | Lattice state limit. k2 may narrow the effective beam to stay within this limit. |
-| `blank_id` | Blank token ID in the original vocabulary; it is remapped internally to column zero for k2. |
+| Argument | Default | Description |
+| --- | --- | --- |
+| `encoder_out` | Required | Encoder states of shape `(N, T, D)`. |
+| `weight` | Required | Linear projection weights of shape `(V, D)`. |
+| `bias` | Required | Projection bias of shape `(V,)`, or `None`. |
+| `y` | Required | Two-axis `k2.RaggedTensor`: one target sequence per utterance, excluding `blank_id`. |
+| `encoder_out_lens` | Required | Int32/int64 frame counts of shape `(N,)`, each in `[1, T]`. |
+| `chunk_size` | `4096` | Positive number of vocabulary columns per chunk. Smaller chunks reduce temporary memory but may slow training. |
+| `output_beam` | `100.0` | Positive, finite log-score beam. Larger beams retain more alignments and use more memory. |
+| `max_states` | `100_000_000` | Positive lattice state limit. k2 may narrow the effective beam to stay within this limit. |
+| `blank_id` | `0` | Blank token ID in the original vocabulary. |
+
+`N`, `T`, `D`, and `V` denote batch size, padded sequence length, encoder
+dimension, and vocabulary size, respectively.
 
 The return value is a scalar `float32` **sum** over utterances. Nonfinite
 per-utterance losses are excluded with a warning, including losses from
@@ -107,19 +102,30 @@ impossible target alignments. With finite inputs, impossible alignments
 contribute zero loss and zero gradients. Apply any desired loss normalization
 explicitly.
 
-### Precision and device requirements
+### Usage notes
 
-- `encoder_out`, `weight`, and `bias` may each use `float32` or `bfloat16`.
-  Their values must be finite. Gradients retain the corresponding input dtypes.
-  `float16` is unsupported.
-- Disable autocast around the loss call, even when the encoder runs under mixed
-  precision. The loss manages its own numerical precision.
-- Put the encoder states, projection parameters, and targets on the same CPU or
-  CUDA device. Frame counts may also stay on the CPU.
-- Target IDs must be valid vocabulary indices and must exclude `blank_id`.
-- Only first-order gradients are supported; double backward is unsupported.
+- Floating-point inputs must be finite and use `float32` or `bfloat16`;
+  `float16` is unsupported. Gradients retain the input dtypes.
+- Disable autocast around the loss call, including during mixed-precision training.
+- Encoder states, projection parameters, and targets must share a CPU or CUDA
+  device; sequence lengths may remain on CPU.
+- Only first-order gradients are supported.
 
 ## License
 
 [MIT](https://github.com/yfyeung/PrunedCTC/blob/master/LICENSE). Copyright 2026 Shanghai Jiao Tong University.
 Author: Yifan Yang.
+
+## Citation
+
+```bibtex
+@misc{yang2026prunedctcmemoryefficientlargevocabulary,
+      title={Pruned CTC for Memory-Efficient Large-Vocabulary ASR Training},
+      author={Yifan Yang and Xiaoyu Yang and Zengrui Jin and Xian Shi and Yuxuan Wang and Yu Xi and Ziyang Ma and Qi Chen and Ruiyang Xu and Hui Wang and Dongchao Yang and Jin Xu and Xie Chen},
+      year={2026},
+      eprint={2609.33645},
+      archivePrefix={arXiv},
+      primaryClass={eess.AS},
+      url={https://arxiv.org/abs/2609.33645},
+}
+```
