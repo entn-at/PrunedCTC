@@ -23,7 +23,7 @@ The projection weights, their gradients, and optimizer states remain dense.
 Memory savings depend on the vocabulary, batch, sequence lengths, chunk size,
 and alignment beam.
 
-[![Vocabulary head and CTC loss memory and runtime versus vocabulary size](assets/fig_vocab_scaling.png)](assets/fig_vocab_scaling.pdf)
+<a href="assets/fig_vocab_scaling.pdf"><img src="assets/fig_vocab_scaling.png" alt="Vocabulary head and CTC loss memory and runtime versus vocabulary size" width="600"></a>
 
 **Figure 3.** Vocabulary head and CTC loss memory (top) and runtime (bottom)
 for forward and backward passes. Crosses mark extrapolated out-of-memory (OOM) points.
