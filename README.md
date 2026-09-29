@@ -6,6 +6,12 @@
 Official code for
 *Pruned CTC for Memory-Efficient Large-Vocabulary ASR Training*.
 
+<p>
+  <a href="assets/fig_vocab_scaling.pdf"><img src="assets/fig_vocab_scaling.png" alt="Vocabulary head and CTC loss memory and runtime versus vocabulary size" width="600"></a><br>
+  <sub><em>Vocabulary head and CTC loss memory (top) and runtime (bottom) for forward and backward passes.<br>
+  Crosses mark extrapolated out-of-memory (OOM) points.</em></sub>
+</p>
+
 Pruned CTC uses PyTorch and [k2](https://github.com/k2-fsa/k2) to compute the CTC
 loss directly from encoder states and a linear projection, avoiding a full
 `(batch, time, vocabulary)` logit tensor. It combines:
@@ -22,11 +28,6 @@ loss directly from encoder states and a linear projection, avoiding a full
 The projection weights, their gradients, and optimizer states remain dense.
 Memory savings depend on the vocabulary, batch, sequence lengths, chunk size,
 and alignment beam.
-
-<a href="assets/fig_vocab_scaling.pdf"><img src="assets/fig_vocab_scaling.png" alt="Vocabulary head and CTC loss memory and runtime versus vocabulary size" width="600"></a>
-
-Vocabulary head and CTC loss memory (top) and runtime (bottom)
-for forward and backward passes. Crosses mark extrapolated out-of-memory (OOM) points.
 
 ## Installation
 
