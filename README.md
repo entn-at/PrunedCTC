@@ -127,7 +127,7 @@ Author: Yifan Yang.
 Please cite our paper if you find this work useful:
 
 ```bibtex
-@misc{yang2026prunedctcmemoryefficientlargevocabulary,
+@misc{yang2026prunedctc,
       title={Pruned CTC for Memory-Efficient Large-Vocabulary ASR Training},
       author={Yifan Yang and Xiaoyu Yang and Zengrui Jin and Xian Shi and Yuxuan Wang and Yu Xi and Ziyang Ma and Qi Chen and Ruiyang Xu and Hui Wang and Dongchao Yang and Jin Xu and Xie Chen},
       year={2026},
